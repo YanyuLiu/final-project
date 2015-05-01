@@ -56,21 +56,3 @@ def kmeanspar(k,l,r,data):
         c = np.concatenate((c,C[x,]))
     #change the return to only test initialization part
     return c
-
-def Random(k,data):
-    """k is the number of centers, data is target data"""
-    if k >= len(data):
-        raise ValueError('k is too large')
-    return data[np.random.choice(len(data),k,replace=False),:]
-
-def kmeansplus(k,data):
-    if k >= len(data):
-        raise ValueError('k is too large')
-    #Step 1
-    C = data[nrd.choice(range(len(data)),1),]
-    #while loop
-    while len(C) < k:
-        prob = ([Cost(C,x) for x in data]/Cost(C,data)).reshape(len(data))
-        x = nrd.choice(range(len(data)),1,p=prob)
-        C = np.concatenate((C,data[x,]))
-    return C
