@@ -1,3 +1,11 @@
+
+import numpy as np
+import numpy.random as nrd
+#centroid
+# def Centroid(Y):
+#     """Y is a subset of the dataset"""
+#     return np.average(Y,axis=0)
+
 def Cost(C, Y):
     """C is a subset of the dataset, Y can be a point or a subset"""
     if  len(Y.shape)==1 or Y.shape[0]==1:
@@ -21,21 +29,6 @@ def weight(C, data):
         #frequency for each center
         return np.array([Index_min.count(i) for i in range(len(C))]).astype(float)
 
-def weight_v1(C, data):
-    """C is the centroid set and data is the target data set"""
-    if len(C.shape)==1 or C.shape[0]==1:
-        #C only have one point
-        if len(data.shape)==1 or data.shape[0]==1:
-            return np.array([1])
-        else:
-            return np.array([len(data)])
-    else:
-        #construct a cost matrix c[i,j]=distance(C[i],data[j])
-        Cost_matrix = np.array([np.sum((c-x)**2) for c in C
-                                             for x in data]).reshape(len(C),len(data))
-        Index_min = list(np.argmin(Cost_matrix,axis=0))
-        return np.array([Index_min.count(i) for i in range(len(C))])
-    
 def kmeanspar(k,l,r,data):
     """k is the number of centers, l is the expected number of intermediate points
     in each iteration, r is the number of iterations, data is the target data set"""
@@ -61,24 +54,23 @@ def kmeanspar(k,l,r,data):
         Prob = p*weights/np.sum(p*weights)
         x = nrd.choice(range(len(C)),1,p=Prob)
         c = np.concatenate((c,C[x,]))
-    ##carry out K-means clustering
-    km = KMeans(n_clusters=k,init=c,n_init=1)
-    km.fit(data)
-    return km
+    #change the return to only test initialization part
+    return c
 
 def Random(k,data):
     """k is the number of centers, data is target data"""
     if k >= len(data):
         raise ValueError('k is too large')
-    ##carry out K-means clustering
-    km = KMeans(n_clusters=k,init='random')
-    km.fit(data)
-    return km
+    return data[np.random.choice(len(data),k,replace=False),:]
 
 def kmeansplus(k,data):
     if k >= len(data):
         raise ValueError('k is too large')
-    ##carry out K-means clustering
-    km = KMeans(n_clusters=k,init='k-means++')
-    km.fit(data)
-    return km
+    #Step 1
+    C = data[nrd.choice(range(len(data)),1),]
+    #while loop
+    while len(C) < k:
+        prob = ([Cost(C,x) for x in data]/Cost(C,data)).reshape(len(data))
+        x = nrd.choice(range(len(data)),1,p=prob)
+        C = np.concatenate((C,data[x,]))
+    return C

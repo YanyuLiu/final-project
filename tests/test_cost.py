@@ -2,7 +2,7 @@
 import numpy as np
 import numpy.random as nrd
 from numpy.testing import assert_equal
-from kmeans import Cost
+from kmeans_fortest import Cost
 
 # def test_Centroid_dimension():
    

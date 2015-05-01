@@ -2,7 +2,7 @@
 import numpy as np
 import numpy.random as nrd
 from numpy.testing import assert_equal
-from kmeans import Cost,weight
+from kmeans_fortest import Cost,weight
 
 def test_weight_one_point():
     C=nrd.multivariate_normal([0,0,0],5*np.identity(3),3)

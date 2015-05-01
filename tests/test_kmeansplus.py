@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.random as nrd
 from numpy.testing import assert_equal,assert_raises
-from kmeans import Cost,kmeansplus
+from kmeans_fortest import Cost,kmeansplus
 
 k = 5
 centers = nrd.multivariate_normal([0,0,0],5*np.identity(3),k)
